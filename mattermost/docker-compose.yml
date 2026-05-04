@@ -1,0 +1,27 @@
+services:
+  db:
+    image: docker.arvancloud.ir/postgres:15
+    container_name: mattermost-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mmuser
+      POSTGRES_PASSWORD: mmuser_password
+      POSTGRES_DB: mattermost
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  app:
+    image: docker.arvancloud.ir/mattermost/mattermost-team-edition:latest
+    container_name: mattermost-app
+    restart: unless-stopped
+    ports:
+      - "8065:8065"
+    environment:
+      MM_SQLSETTINGS_DRIVERNAME: postgres
+      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@db:5432/mattermost?sslmode=disable
+    depends_on:
+      - db
+
+  volumes:
+  postgres-data:
+    name: postgres-data
