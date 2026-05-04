@@ -1,0 +1,34 @@
+services:
+  kopia-server:
+    image: hub.hamdocker.ir/kopia/kopia
+    container_name: kopia-server
+    restart: unless-stopped
+    ports:
+      - "51515:51515"
+    volumes:
+      - ./kopia-repository:/repository
+      - kopia-config:/app/config
+      - kopia-cache:/app/cache
+      - my-app-data:/data/my-app:ro
+      - my-db-data:/data/my-db:ro
+      - postgres-data:/data/postgres:ro 
+      - ./restore-destination:/restore 
+    environment:
+      KOPIA_PASSWORD: admin
+      USER: admin
+    command: >
+      server start
+      --insecure
+      --address=0.0.0.0:51515
+      --override-username=admin@local
+      --override-hostname=kopia-server
+      --server-username=admin@local
+      --server-password=admin
+
+volumes:
+  kopia-config:
+  kopia-cache:
+  my-app-data:
+  my-db-data:
+  postgres-data:
+    external: true
