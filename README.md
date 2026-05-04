@@ -1,2 +1,2 @@
 # kopia-mattermost-postgres-example
-Snapshot and restore data from Mettermost using Kopia
+This guide explains how to create snapshots and restore Metermost data using Kopia.
